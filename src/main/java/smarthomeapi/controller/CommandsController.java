@@ -29,10 +29,28 @@ public class CommandsController {
 
         switch(commandRequestDTO.command()){
             case "1":
-                mqttPublisher.publishCommand("LIGAR LUZ");
+                mqttPublisher.publishCommand("LIGAR LUZ INTERIOR");
                 break;
             case "2":
-                mqttPublisher.publishCommand("DESLIGAR LUZ");
+                mqttPublisher.publishCommand("DESLIGAR LUZ INTERIOR");
+                break;
+            case "3":
+                mqttPublisher.publishCommand("ABRIR PORTA");
+                break;
+            case "4":
+                mqttPublisher.publishCommand("FECHAR PORTA");
+                break;
+            case "5":
+                mqttPublisher.publishCommand("ABRIR JANELA");
+                break;
+            case "6":
+                mqttPublisher.publishCommand("FECHAR JANELA");
+                break;
+            case "7":
+                mqttPublisher.publishCommand("ATIVAR ALARME");
+                break;
+            case "8":
+                mqttPublisher.publishCommand("DESATIVAR ALARME");
                 break;
         }
 

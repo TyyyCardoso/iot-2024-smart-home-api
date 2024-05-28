@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MqttPublisher {
     private static final String BROKER_URL = "tcp://85.241.132.174:1883";
-    private static final String TOPIC = "commands";
+    private static final String TOPIC = "topicAPP";
     private static final String USERNAME = "mqttbroker"; // Replace with your MQTT broker username
     private static final String PASSWORD = "iot2024"; // Replace with your MQTT broker password
 

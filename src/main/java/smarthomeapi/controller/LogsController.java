@@ -6,11 +6,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import smarthomeapi.database.entities.Info;
 import smarthomeapi.database.entities.Log;
-import smarthomeapi.database.services.InfoService;
+import smarthomeapi.database.entities.Sensor;
 import smarthomeapi.database.services.LogsService;
-import smarthomeapi.dto.InfoRequestDTO;
+import smarthomeapi.database.services.SensorService;
 import smarthomeapi.dto.LogRequestDTO;
 
 import java.time.LocalDateTime;
@@ -21,6 +20,8 @@ public class LogsController {
 
     @Autowired
     private LogsService logsService;
+    @Autowired
+    private SensorService sensorService;
 
     public LogsController(LogsService logsService) {
         this.logsService = logsService;
@@ -40,6 +41,30 @@ public class LogsController {
 
         // Salvar o objeto Info no banco de dados
         Log savedLog = logsService.saveLogs(log);
+
+        if(!logRequestDTO.sensor().isEmpty()){
+            Sensor sensor = new Sensor();
+
+            switch(logRequestDTO.sensor()){
+                case "LUZ INTERIOR":
+                     sensor = sensorService.find("LUZ INTERIOR");
+                    break;
+                case "PORTA":
+                    sensor = sensorService.find("PORTA");
+                    break;
+                case "JANELA":
+                    sensor = sensorService.find("JANELA");
+                    break;
+                case "ALARME":
+                    sensor = sensorService.find("ALARME");
+                    break;
+            }
+
+            sensor.setState(logRequestDTO.state());
+
+
+            sensorService.save(sensor);
+        }
 
         // Retornar o objeto Info salvo como resposta
         return ResponseEntity.ok(savedLog);
