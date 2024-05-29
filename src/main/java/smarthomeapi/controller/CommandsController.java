@@ -10,6 +10,7 @@ import smarthomeapi.database.entities.Log;
 import smarthomeapi.database.services.LogsService;
 import smarthomeapi.dto.CommandRequestDTO;
 import smarthomeapi.dto.LogRequestDTO;
+import smarthomeapi.dto.TempRequestDTO;
 import smarthomeapi.mqtt.MqttPublisher;
 
 import java.time.LocalDateTime;
@@ -25,7 +26,7 @@ public class CommandsController {
     }
 
     @PostMapping("/execute")
-    public ResponseEntity<String> uploadLog(@RequestBody CommandRequestDTO commandRequestDTO) {
+    public ResponseEntity<String> execute(@RequestBody CommandRequestDTO commandRequestDTO) {
 
         switch(commandRequestDTO.command()){
             case "1":
@@ -54,6 +55,12 @@ public class CommandsController {
                 break;
         }
 
+        return ResponseEntity.ok("Ok");
+    }
+
+    @PostMapping("/set_temp")
+    public ResponseEntity<String> setTemp(@RequestBody TempRequestDTO tempRequestDTO) {
+        mqttPublisher.publishCommand("TEMP:" + tempRequestDTO.temp());
         return ResponseEntity.ok("Ok");
     }
 
