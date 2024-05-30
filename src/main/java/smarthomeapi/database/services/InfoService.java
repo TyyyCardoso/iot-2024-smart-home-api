@@ -17,6 +17,10 @@ public class InfoService {
         return infoRepository.findAll();
     }
 
+    public Info getLastInfo() {
+        return infoRepository.findLastInfo().get(0);
+    }
+
     public Info saveRecentInfo(Info info){
         return infoRepository.save(info);
     }

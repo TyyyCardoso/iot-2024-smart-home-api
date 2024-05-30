@@ -4,6 +4,7 @@ package smarthomeapi.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +26,7 @@ public class InfoController {
         this.infoService = infoService;
     }
     @PostMapping("/upload")
-    public ResponseEntity<Info> getInfo(@RequestBody InfoRequestDTO infoRequestDTO) {
+    public ResponseEntity<Info> setInfo(@RequestBody InfoRequestDTO infoRequestDTO) {
         // Criar um objeto Info com os dados da solicitação
         Info info = new Info();
         info.setTemperatura(infoRequestDTO.temperatura());
@@ -45,6 +46,11 @@ public class InfoController {
 
         // Retornar o objeto Info salvo como resposta
         return ResponseEntity.ok(savedInfo);
+    }
+
+    @GetMapping("/get")
+    public ResponseEntity<Info> getInfo() {
+        return ResponseEntity.ok(infoService.getLastInfo());
     }
 
 }
