@@ -3,6 +3,7 @@ package smarthomeapi.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +14,7 @@ import smarthomeapi.database.services.SensorService;
 import smarthomeapi.dto.LogRequestDTO;
 
 import java.time.LocalDateTime;
+import java.util.*;
 
 @Controller
 @RequestMapping("/logs")
@@ -68,6 +70,16 @@ public class LogsController {
 
         // Retornar o objeto Info salvo como resposta
         return ResponseEntity.ok(savedLog);
+    }
+
+    @GetMapping("/get")
+    public ResponseEntity<List<Log>> getLogs() {
+        // Criar um objeto Info com os dados da solicitação
+        List<Log> logs;
+
+        logs = logsService.getRecentLogs();
+
+        return ResponseEntity.ok(logs);
     }
 
 }

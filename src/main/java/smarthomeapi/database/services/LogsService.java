@@ -7,6 +7,7 @@ import smarthomeapi.database.entities.Log;
 import smarthomeapi.database.repos.InfoRepository;
 import smarthomeapi.database.repos.LogsRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -16,7 +17,7 @@ public class LogsService {
     LogsRepository logsRepository;
 
     public List<Log> getRecentLogs(){
-        return logsRepository.findAll();
+        return logsRepository.findAllOrderByCreatedAt();
     }
 
     public Log saveLogs(Log log){
