@@ -60,6 +60,9 @@ public class LogsController {
                 case "ALARME":
                     sensor = sensorService.find("ALARME");
                     break;
+                case "AUTOMATICO":
+                    sensor = sensorService.find("AUTOMATICO");
+                    break;
             }
 
             sensor.setState(logRequestDTO.state());
