@@ -6,12 +6,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.client.RestTemplate;
 import smarthomeapi.database.entities.Log;
 import smarthomeapi.database.entities.Sensor;
 import smarthomeapi.database.services.LogsService;
 import smarthomeapi.database.services.SensorService;
 import smarthomeapi.dto.CommandRequestDTO;
-import smarthomeapi.dto.LogRequestDTO;
 import smarthomeapi.dto.TempRequestDTO;
 import smarthomeapi.mqtt.MqttPublisher;
 
@@ -26,6 +26,9 @@ public class CommandsController {
     private SensorService sensorService;
     @Autowired
     private LogsService logsService;
+
+    private static final String API_KEY = "d3dd0cd14cea95db44aa21388bef7ddd";
+    private final String BASE_URL = "https://api.openweathermap.org/data/2.5/weather?q=Tomar&appid=";
 
     public CommandsController(MqttPublisher mqttPublisher) {
         this.mqttPublisher = mqttPublisher;
@@ -93,6 +96,7 @@ public class CommandsController {
                 mqttPublisher.publishCommand("LIGAR AUTO");
                 sensor = sensorService.find("AUTOMATICO");
                 log.setAcao("Modo automatico ligado!");
+                System.out.println(checkRain());
                 break;
             case "10":
                 mqttPublisher.publishCommand("DESLIGAR AUTO");
@@ -126,6 +130,18 @@ public class CommandsController {
 
 
         return ResponseEntity.ok("Ok");
+    }
+
+    public String checkRain() {
+        RestTemplate restTemplate = new RestTemplate();
+        String url = BASE_URL + API_KEY;
+        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+
+        if (response.getBody().contains("Rain")) {
+            return "Está chovendo em Tomar.";
+        } else {
+            return "Não está chovendo em Tomar.";
+        }
     }
 
 }
