@@ -96,7 +96,7 @@ public class CommandsController {
                 mqttPublisher.publishCommand("LIGAR AUTO");
                 sensor = sensorService.find("AUTOMATICO");
                 log.setAcao("Modo automatico ligado!");
-                System.out.println(checkRain());
+                checkRain();
                 break;
             case "10":
                 mqttPublisher.publishCommand("DESLIGAR AUTO");
@@ -132,16 +132,21 @@ public class CommandsController {
         return ResponseEntity.ok("Ok");
     }
 
-    public String checkRain() {
+    public void checkRain() {
         RestTemplate restTemplate = new RestTemplate();
         String url = BASE_URL + API_KEY;
         ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
 
+        Sensor sensor = new Sensor();
+        sensor = sensorService.find("CHUVA");
         if (response.getBody().contains("Rain")) {
-            return "Está chovendo em Tomar.";
+            sensor.setState("1");
+            mqttPublisher.publishCommand("SIM CHUVA");
         } else {
-            return "Não está chovendo em Tomar.";
+            sensor.setState("0");
+            mqttPublisher.publishCommand("NAO CHUVA");
         }
+        sensorService.save(sensor);
     }
 
 }
